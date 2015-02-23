@@ -15,7 +15,7 @@
     <iframe id="iframe" width="100%" height="500px" src="/ade/standard/gui/tree.jsp?&forceLoad=false&isDirect=true&projectId=12"></iframe>
 
     <p>Cours choisis : <span id="cours"></span></p>
-    <p>Calendar: http://miow.olympe.in/script/cal.php?group=<span id="cours2"></span></p>
+    <p>Calendar: webcal://miow.olympe.in/script/cal.php?group=<span id="cours2"></span></p>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -33,7 +33,6 @@
       function setCours(cours) {
         cours_container.innerHTML = cours.join(' ');
         cours2_container.innerHTML = cours.join(',');
-        console.log(cours_container, cours2_container, cours);
       }
       var cours = [];
       document.getElementById('iframe').onload = function () {
@@ -43,24 +42,24 @@
           var item = part.split("=");
           get[item[0]] = decodeURIComponent(item[1]);
         });
-        var id = get.selectBranchId || get.branchId || get.selectId;
+        var id = get.selectBranchId || get.selectId;
         var reset = get.reset === "true";
-        console.log(id, reset);
-        if (reset) {
-          cours = [id];
-        } else {
-          var contained = cours.some(function (cour) {
-            return cour === id;
-          });
-          if (contained) {
-            cours = cours.filter(function (cour) {
-              return cour !== id;
-            });
+        if (id) {
+          if (reset) {
+            cours = [id];
           } else {
-            cours.push(id);
+            var contained = cours.some(function (cour) {
+              return cour === id;
+            });
+            if (contained) {
+              cours = cours.filter(function (cour) {
+                return cour !== id;
+              });
+            } else {
+              cours.push(id);
+            }
           }
         }
-        console.log(get);
         setCours(cours);
       };
     </script>
