@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
-    url(r'^.*$', 'application.views.home'),
+    url(r'^$|^/$|^index.html$', 'application.views.home'),
+    url(r'^.*$', 'application.views.proxy')
 )

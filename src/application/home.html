@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TODO</title>
+    <meta name="description" content="TODO">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <iframe id="iframe" width="100%" height="500px" src="/ade/standard/gui/tree.jsp?&forceLoad=false&isDirect=true&projectId=12"></iframe>
+
+    <p>Cours choisis : <span id="cours"></span></p>
+    <p>Calendar: http://miow.olympe.in/script/cal.php?group=<span id="cours2"></span></p>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+    </script>
+
+    <script>
+      var cours_container = document.getElementById('cours');
+      var cours2_container = document.getElementById('cours2');
+      function setCours(cours) {
+        cours_container.innerHTML = cours.join(' ');
+        cours2_container.innerHTML = cours.join(',');
+        console.log(cours_container, cours2_container, cours);
+      }
+      var cours = [];
+      document.getElementById('iframe').onload = function () {
+        var query = this.contentWindow.location.search.substr(1);
+        var get = {};
+        query.split("&").forEach(function(part) {
+          var item = part.split("=");
+          get[item[0]] = decodeURIComponent(item[1]);
+        });
+        var id = get.selectBranchId || get.branchId || get.selectId;
+        var reset = get.reset === "true";
+        console.log(id, reset);
+        if (reset) {
+          cours = [id];
+        } else {
+          var contained = cours.some(function (cour) {
+            return cour === id;
+          });
+          if (contained) {
+            cours = cours.filter(function (cour) {
+              return cour !== id;
+            });
+          } else {
+            cours.push(id);
+          }
+        }
+        console.log(get);
+        setCours(cours);
+      };
+    </script>
+  </body>
+</html>
